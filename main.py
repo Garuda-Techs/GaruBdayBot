@@ -1,114 +1,62 @@
 from typing import Final
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackContext
 import pandas as pd
-from datetime import datetime
-from datetime import date
+import requests
+from datetime import date, datetime, time
 import logging
 import asyncio
 
 
+
 TOKEN = '6858348326:AAFpoAlVINlW08nVikkwGS8jFDV1bKgKPQM'
 BOT_USERNAME = Final = '@GaruBdayBot'
+# before you uncomment the line, add the csv file for the birthdays into the github repo
+# CSV_URL =  "https://raw.githubusercontent.com/Garuda-Techs/GaruBdayBot/birthdays.csv"
 today = date.today()
 
+# Configure logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    while True:
-        #Check if current date time == midnight if it does then actually do this if not go to sleep for x amount of time then check agoin
-        await update.message.reply_text('Hello! I am GaruBday Bot!')
-        task = asyncio.create_task(continuous_function(update))
-        await task
-        print(task.result())
-        await update.message.reply_text(task.result())
-
-
-
+    await update.message.reply_text('Hello! I am GaruBday Bot!')
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Hello! GaruBdayBot Help command?')
-    #decision tree, ask for name, check for
+
     
-# async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # await update.message.reply_text('Hello! This is a custom command?')
-    
+async def check_birthdays(context: CallbackContext):
+    today = datetime.now().strftime('%d/%m')
+    try:
+        response = requests.get(CSV_URL)
+        response.raise_for_status()  # Ensure we notice bad responses
+        df = pd.read_csv(pd.compat.StringIO(response.text))
 
-df = pd.read_csv(r"/Users/martin/Downloads/CAPT/birthdays! - Sheet1.csv")
-# value = df.iat[1, 1]
+        for index, row in df.iterrows():
+            if today == row['Birthday']:
+                await context.bot.send_message(chat_id=context.job.chat_id, text=f"Happy Birthday {row['Name']}!")
+    except Exception as e:
+        logger.error(f"Failed to fetch or process CSV: {e}")
 
-
-async def continuous_function(update: Update):
-    print("teest")
-    
-    for index, row in df.iterrows():
-        # print(row[4], row[5], "!!")
-        print('gg')
-        if today.strftime('%d/%m') == row.iloc[5]:
-            print('gggg')
-            return row.iloc[4]
-
-
-    # Sleep for a period to avoid excessive API calls
-    await asyncio.sleep(30)
-    
-async def happyBirthday(context: CallbackContext):
-    print('Happy Birthday')
-    await context.bot.send_message(chat_id=update.message.chat.id, text='Happy Birthday ' + df.iat[0,1])
-
-# Responses
-def handle_response(text: str) -> str:
-    processed: str = text.lower()
-
-    if 'who' in processed:
-        if (df.iat[0,0] == today.strftime('%d/%m')):
-            return  'Happy Birthday ' + df.iat[0,1]
-        else:
-            return df.iat[0,1]
-    
-    return 'I do not understand what you wrote'
-
-
-
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    message_type: str = update.message.chat.type
-    text: str = update.message.text 
-
-    print(f'User ( {update.message.chat.id}) in {message_type} : "{text}"')
-
-    if message_type == 'group':
-        if BOT_USERNAME in text:
-            new_text: str = text.replace(BOT_USERNAME, '').strip()
-            response: str = handle_response(new_text)
-        
-        else:
-            return
-    else:
-        print(f'Message type: {message_type}')
-        response: str = handle_response(text)
-    
-    print('Bot:', response)
-    await update.message.reply_text(response)
-
-
-async def error(update: Update, context : ContextTypes.DEFAULT_TYPE):
-    print(f'Update {update} cause error {context.error}')
+async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.error(f'Update {update} caused error {context.error}')
 
 if __name__ == '__main__':
     print('Starting bot...')
     app = Application.builder().token(TOKEN).build()
 
-
     # Commands
     app.add_handler(CommandHandler('start', start_command))
     app.add_handler(CommandHandler('help', help_command))
-    # app.add_handler(CommandHandler('custom', custom_command))
 
-    #Messages
-    app.add_handler(MessageHandler(filters.TEXT, handle_message))
-
-    #Errors
+    # Errors
     app.add_error_handler(error)
 
-    #Polls the bot  
+    # Schedule the birthday check function to run daily at a specific time (e.g., midnight)
+    job_queue = app.job_queue
+    job_queue.run_daily(check_birthdays, time=time(0, 0), name="birthday_check", chat_id='YOUR_CHAT_ID')
+
     print('Polling...')
-    app.run_polling(poll_interval =3)
+    app.run_polling(poll_interval=3)
     
