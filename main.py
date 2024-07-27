@@ -11,7 +11,8 @@ import asyncio
 TOKEN = '6858348326:AAFpoAlVINlW08nVikkwGS8jFDV1bKgKPQM'
 BOT_USERNAME: Final = '@GaruBdayBot'
 CSV_URL = "https://raw.githubusercontent.com/Garuda-Techs/GaruBdayBot/main/birthdays.csv"
-CHAT_ID = '-1002218572340'  # Replace with your actual chat ID
+CHAT_ID = '-2175948359'  # Replace with your actual chat ID
+TOPIC_THREAD_ID = 30 # Replace with your actual topic thread ID
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -26,7 +27,11 @@ async def check_birthdays(application: Application):
 
         for index, row in df.iterrows():
             if today == row['Birthday']:
-                await application.bot.send_message(chat_id=CHAT_ID, text=f"Happy Birthday {row['Name']}!")
+                await application.bot.send_message(
+                    chat_id=CHAT_ID,
+                    text=f"Happy Birthday {row['Name']}!",
+                    message_thread_id=TOPIC_THREAD_ID
+                )
     except Exception as e:
         logger.error(f"Failed to fetch or process CSV: {e}")
 
