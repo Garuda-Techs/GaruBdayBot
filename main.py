@@ -11,8 +11,8 @@ import asyncio
 TOKEN = '6858348326:AAFpoAlVINlW08nVikkwGS8jFDV1bKgKPQM'
 BOT_USERNAME: Final = '@GaruBdayBot'
 CSV_URL = "https://raw.githubusercontent.com/Garuda-Techs/GaruBdayBot/main/birthdays.csv"
-CHAT_ID = '-2175948359'  # Replace with your actual chat ID
-TOPIC_THREAD_ID = 30 # Replace with your actual topic thread ID
+CHAT_ID = '-1002175948359'  # Replace with your actual chat ID
+TOPIC_THREAD_ID = '4' # Replace with your actual topic thread ID
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
