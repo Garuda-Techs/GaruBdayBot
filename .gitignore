@@ -1,0 +1,4 @@
+# Configuration files
+.env
+.venv
+service-account-key.json
