@@ -20,7 +20,7 @@ BOT_USERNAME: Final = '@GaruBdayBot'
 # CHAT_ID = "-1002218572340" # Testing: HC Techies Chat
 CHAT_ID = '-1002175948359'  # Production: Garuda House Chat
 TOPIC_THREAD_ID = '4' # Birthday Subtopic
-SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1H684nLTxJn2vQOCR1Zhv1CiqNAt535Q9yhHQCGaXqIw/edit?pli=1&gid=1262152600#gid=1262152600'
+SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1H684nLTxJn2vQOCR1Zhv1CiqNAt535Q9yhHQCGaXqIw/edit?pli=1&gid=2135567390#gid=2135567390'
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
