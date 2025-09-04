@@ -7,13 +7,13 @@ from datetime import datetime, timedelta
 import logging
 import io
 import asyncio
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import os
 import gspread
 from google.oauth2.service_account import Credentials
 
 # Get environment variables
-load_dotenv()
+#load_dotenv()
 
 TOKEN = "8314571423:AAFRNvR4a7FprR3Sv2Z57mcLdKw9feicXYo" #os.getenv('BOT_TOKEN')
 BOT_USERNAME: Final = "'@GarudaBirthdayBot'
