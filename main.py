@@ -16,7 +16,7 @@ from google.oauth2.service_account import Credentials
 load_dotenv()
 
 TOKEN = "8314571423:AAFRNvR4a7FprR3Sv2Z57mcLdKw9feicXYo" #os.getenv('BOT_TOKEN')
-BOT_USERNAME: Final = "'@GarudaBdayBot'
+BOT_USERNAME: Final = "'@GarudaBirthdayBot'
 # CHAT_ID = "-1002218572340" # Testing: HC Techies Chat
 # CHAT_ID = '-1002175948359'  # Production: Garuda House Chat
 CHAT_ID = '-1002993620001' # Testing: HC Techies Chat 25/26
