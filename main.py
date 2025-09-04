@@ -43,7 +43,7 @@ async def check_birthdays(application: Application):
             if today == row['Birthday']:
                 await application.bot.send_message(
                     chat_id=CHAT_ID,
-                    text=f"Happy Birthday {row['Name']}!",
+                    text=f"Happy Birthday {row['Name']}!!!0",
                     message_thread_id=TOPIC_THREAD_ID
                 )
     
